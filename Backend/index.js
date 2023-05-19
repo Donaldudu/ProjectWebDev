@@ -2,10 +2,11 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const Student = require("./Models/Student")
+const jwt=require("jsonwebtoken")
 require("dotenv").config();
 const MONGODB_URL = process.env.URL;
 const port = process.env.port;
-
+app.use(express.json())
 mongoose
     .connect(MONGODB_URL)
     .then(()=>{
@@ -15,44 +16,27 @@ mongoose
         console.log(err);
     })
 
-app.get("/",(req,res)=>{
-    res.send("Home Page")
+    app.get("/",(req,res)=>{
+        res.send("Home Page")
 })
 
 app.listen(port)
 
 
 app.post("/signup", async (req, res, next) => {
-    const { CGPA, SGPA,rollNumber, studentName, password, batch, degree, section, status, phone, gender, email, address, guardian } = req.body;
-    const newStudent = {
-        CGPA : 0,
-        SGPA  : null,
-        rollNumber,
-        studentName,
-        password,
-        batch,
-        degree,
-        section,
-        status,
-        phone,  
-        gender,
-        email,
-        address,
-        guardian,
-    };
-    console.log(newUser)
+    const st=req.body;
     try {
-        const student = new Student(newStudent);
+        const student = new Student(st);
         const result = await student.save();
-        res.status(200).json(result);
-
+        // res.status(200).json(result);
     } catch(err) {
-        res.status(404).json(err);
+        console.log("errrrrrrrrrrrr")
+        // res.status(404).json(err);
     }
     let token;
     try {
         token = jwt.sign(
-            {rollNo: newStudent.rollNumber,name :newStudent.studentName ,email: newStudent.email },
+            {rollNumber: st.rollNumber,studentName :st.studentName ,email: st.email },
             process.env.SecretKey,
             { expiresIn: "1h" }
         );
@@ -60,14 +44,12 @@ app.post("/signup", async (req, res, next) => {
         const error = new Error("Error! Something went wrong.");
         next(error);
     }
-
     res
         .status(201)
         .json({
             success: true,
             data: {
-                rollno: newStudent.rollNumber,
-                email: newStudent.email,
+                rollNumber:st.rollNumber,
                 token: token
             },
         });
