@@ -1,0 +1,45 @@
+.login-box {
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    margin-top: .4in;
+    padding: 0.4in;
+    background-color: white;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+  }
+.student-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+  }
+  
+  .student-form label {
+    margin-bottom: 10px;
+  }
+  
+  .student-form input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .student-form button {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: blueviolet;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .student-form button:hover {
+    transition: 500ms;
+    background-color: darkviolet;
+  }
+  

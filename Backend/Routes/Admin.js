@@ -3,6 +3,31 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const Student=require("../Models/Student")
 const Course=require("../Models/Course")
+// const jwt=require("jsonwebtoken")
+require("dotenv").config();
+
+
+const authMiddleware = (req, res, next) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const key = process.env.SecretKey;
+    if (!token) {
+      res.status(200).json({
+        success: false,
+        message: "Error! Token was not provided.",
+      });
+    }
+    try {
+      const decodedToken = jwt.verify(token, key);
+      req.token = decodedToken;
+      next();
+    } catch (err) {
+      res.status(401).json({
+        success: false,
+        message: err.message,
+      });
+    }
+  };
+
 
 router.post("/signup", async (req, res, next) => {
     const st=req.body;
@@ -15,7 +40,7 @@ router.post("/signup", async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            {rollNumber: st.rollNumber,studentName :st.studentName ,email: st.email },
+            {rollNo: st.rollNo,studentName :st.studentName ,email: st.email },
             process.env.SecretKey,
             { expiresIn: "1h" }
         );
@@ -28,7 +53,7 @@ router.post("/signup", async (req, res, next) => {
         .json({
             success: true,
             data: {
-                rollNumber:st.rollNumber,
+                //rollNo:st.rollNo,
                 token: token
             },
         });
@@ -43,10 +68,9 @@ router.post('/AdminLogin',(req,res)=>{
     else{
         res.status(404).send("Wrong email or password")
     }
-
 })
 
-router.get('/getStudents',(req,res)=>{
+router.get('/getStudents',authMiddleware,(req,res)=>{
     Student.find()
     .then(sArray=>{
         res.json(sArray)
@@ -57,7 +81,7 @@ router.get('/getStudents',(req,res)=>{
 })
 
 
-router.post('/studentUpdate', async(req,res)=>{
+router.post('/studentUpdate',authMiddleware ,async(req,res)=>{
  const {rollNumber,studentName,password,
 CGPA,SGPA,batch,degree,section,status,phone
 ,gender,email,address,gaurdian,} = req.body 
@@ -84,7 +108,7 @@ CGPA,SGPA,batch,degree,section,status,phone
 
 })
 
-router.post('/AddCourses', (req, res) => {
+router.post('/AddCourses',authMiddleware ,(req, res) => {
     const newCourse=new Course(req.body)
     newCourse.save().then((result)=>{
         res.status(200).json(result)
@@ -93,7 +117,7 @@ router.post('/AddCourses', (req, res) => {
     })
   });
 
-  router.delete('/DeleteCourses', (req, res) => {
+  router.delete('/DeleteCourses',authMiddleware ,(req, res) => {
     const courseId = req.body.courseCode;
     Course.deleteOne({courseCode:courseCode}).then((result)=>{
         res.status(200).json(result)
