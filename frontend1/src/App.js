@@ -2,7 +2,7 @@ import StudentForm from "./RegisterStudent";
 import Navbar from "./Navbar";
 import LoginAdmin from "./LoginAdmin";
 import ViewFeedbacks from "./ViewFeedbacks";
-import InstructorForm from "./RegisterInstructor";
+import AddInstructor from "./RegisterInstructor";
 import CardsContainer from "./User"
 import { Routes , Route } from "react-router-dom";
 function App() {
@@ -13,7 +13,7 @@ function App() {
       <Route path = "/LoginAdmin" element = {<LoginAdmin/>}/> 
       <Route path = "/ViewFeedbacks" element={<ViewFeedbacks/>}/>
       <Route path = "/AddStudent" element={<StudentForm/>}/>
-      <Route path="/AddInstructor" element = {<InstructorForm/>}/>
+      <Route path="/AddInstructor" element = {<AddInstructor/>}/>
       <Route path = "/User" element={<CardsContainer/>}/>
       
       {/* <Route path = "/ViewFeedbacks" element={<ViewFeedbacks/>}/> */}

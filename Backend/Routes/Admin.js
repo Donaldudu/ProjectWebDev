@@ -6,6 +6,7 @@ const Course=require("../Models/Course")
 // const jwt=require("jsonwebtoken")
 require("dotenv").config();
 const Feedback=require("../Models/FeedbackSchema")
+const Instructor=require("../Models/Instructor")
 
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
@@ -68,7 +69,37 @@ router.post("/signup", async (req, res, next) => {
             console.log("errrrrrrrrrrrr",err)
         }
         });
-        
+        //_______________________Instructor Router
+        router.post("/signupInstructor", async (req, res, next) => {
+          const it=req.body;
+          console.log(it)
+          try {
+              const instructor = new Instructor(it);
+              const result = await instructor.save();
+              let token;
+              try {
+                  token = jwt.sign(
+                      {Id: it.Id,instructorName :it.instructorName ,email: it.email },
+                      process.env.SecretKey,
+                      { expiresIn: "1h" }
+                      );
+                  } catch (err) {
+                      const error = new Error("Error! Something went wrong.");
+                      next(error);
+                  }
+                  res
+                  .status(201)
+                  .json({
+                      success: true,
+                      data: {
+                          // rollNo:st.rollNo,
+                          token: token
+                      },
+                  });
+              } catch(err) {
+                  console.log("errrrrrrrrrrrr",err)
+              }
+              });
 
 router.post('/AdminLogin',(req,res)=>{
     const {email,password}=req.body;
