@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './RegisterStudent.css'
-
+import axios from "axios"
 const StudentForm = () => {
   const [rollNo, setRollNo] = useState('');
   const [studentName, setStudentName] = useState('');
@@ -21,10 +21,9 @@ const StudentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Process the form data here
-    console.log({
+    let st={
       rollNo,
       studentName,
-      courseTaken,
       batch,
       semester,
       degree,
@@ -35,9 +34,27 @@ const StudentForm = () => {
       email,
       password,
       address,
-      guardian,
+      guardian,     
+    }
+
+    axios({
+      url:"http://localhost:3001/signup",
+      method:"POST",
+      data:st
+    }).then((res)=>{
       
-    });
+      console.log(res);
+      alert("Student added Successfully")
+    }).catch(err=>{
+      console.log(err)
+    })
+
+
+
+
+
+
+
   };
 
   return (
@@ -61,15 +78,7 @@ const StudentForm = () => {
           onChange={(e) => setStudentName(e.target.value)}
         />
       </label>
-      <br />
-      <label>
-        Course Taken:
-        <input
-          type="text"
-          value={courseTaken}
-          onChange={(e) => setCourseTaken(e.target.value)}
-        />
-      </label>
+
       <br />
       <label>
         Batch:
@@ -79,7 +88,6 @@ const StudentForm = () => {
           onChange={(e) => setBatch(e.target.value)}
         />
       </label>
-      <br />
      
       <br />
       <label>

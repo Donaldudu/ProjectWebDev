@@ -4,6 +4,9 @@ const mongoose = require("mongoose")
 const Student = require("./Models/Student")
 const jwt=require("jsonwebtoken")
 require("dotenv").config();
+const cors=require("cors")
+app.use(cors())
+app.use(express.json())
 
 const MONGODB_URL = process.env.URL;
 const port = process.env.port;

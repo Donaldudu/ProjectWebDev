@@ -5,7 +5,7 @@ const Student=require("../Models/Student")
 const Course=require("../Models/Course")
 // const jwt=require("jsonwebtoken")
 require("dotenv").config();
-
+const Feedback=require("../Models/FeedbackSchema")
 
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
@@ -28,37 +28,47 @@ const authMiddleware = (req, res, next) => {
     }
   };
 
+router.get("/getfeedbacks", async (req, res) => {
+    const result = await Feedback.find({}, { _id: 0 })
+      .then((response) => {
+        res.send(response);
+      })
+      .catch({ message: "error" });
+});
+
+
 
 router.post("/signup", async (req, res, next) => {
     const st=req.body;
+    console.log(st)
     try {
         const student = new Student(st);
         const result = await student.save();
-    } catch(err) {
-        console.log("errrrrrrrrrrrr")
-    }
-    let token;
-    try {
-        token = jwt.sign(
-            {rollNo: st.rollNo,studentName :st.studentName ,email: st.email },
-            process.env.SecretKey,
-            { expiresIn: "1h" }
-        );
-    } catch (err) {
-        const error = new Error("Error! Something went wrong.");
-        next(error);
-    }
-    res
-        .status(201)
-        .json({
-            success: true,
-            data: {
-                //rollNo:st.rollNo,
-                token: token
-            },
+        let token;
+        try {
+            token = jwt.sign(
+                {rollNo: st.rollNo,studentName :st.studentName ,email: st.email },
+                process.env.SecretKey,
+                { expiresIn: "1h" }
+                );
+            } catch (err) {
+                const error = new Error("Error! Something went wrong.");
+                next(error);
+            }
+            res
+            .status(201)
+            .json({
+                success: true,
+                data: {
+                    //rollNo:st.rollNo,
+                    token: token
+                },
+            });
+        } catch(err) {
+            console.log("errrrrrrrrrrrr",err)
+        }
         });
-});
-
+        
 
 router.post('/AdminLogin',(req,res)=>{
     const {email,password}=req.body;

@@ -1,23 +1,53 @@
 import React from 'react';
 import './Navbar.css';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav>
-      <ul>
+    <nav className='navbar'>
+      <ul className='nav-links'>
         <li>
-          <a href="#">User</a>
+        <NavLink to="User" style={{ textDecoration: "none", color: "white",  }}>
+          <strong>
+
+          User
+          </strong>
+          
+          </NavLink>
+
         </li>
         <li>
-          <a href="#">Course</a>
+          <NavLink to="Course" style={{textDecoration: "none", color: "white"}}>
+          <strong>
+            Course
+          </strong>
+            </NavLink>
         </li>
         <li>
-          <a href="#">Account</a>
+          <NavLink to="ViewFeedbacks" style={{textDecoration: "none", color: "white"}}>
+          <strong>
+            Feedbacks
+          </strong>
+            </NavLink>
         </li>
         <li>
-          <a href="#">Academics</a>
+          <NavLink to="Account" style={{textDecoration: "none", color: "white"}}>
+          <strong>
+            Account
+          </strong>
+            </NavLink>
+        </li>
+        <li>
+        <NavLink to="Academics" style={{ textDecoration: "none", color: "white" }}>
+        <strong>
+          Academics
+</strong>
+          </NavLink>
         </li>
       </ul>
+      {/* <button className='butt' onClick={logout}>
+        Logout
+      </button> */}
     </nav>
   );
 };
