@@ -7,7 +7,7 @@ const Course=require("../Models/Course")
 require("dotenv").config();
 const Feedback=require("../Models/FeedbackSchema")
 const Instructor=require("../Models/Instructor")
-
+//Auth middleware Code
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const key = process.env.SecretKey;
@@ -28,7 +28,7 @@ const authMiddleware = (req, res, next) => {
       });
     }
   };
-
+//Router for Feedbacks
 router.get("/getfeedbacks", async (req, res) => {
     const result = await Feedback.find({}, { _id: 0 })
       .then((response) => {
@@ -37,8 +37,42 @@ router.get("/getfeedbacks", async (req, res) => {
       .catch({ message: "error" });
 });
 
+//Router for Adding Courses
 
+//_________________________
+// router.post("/AddCourse", async (req, res, next) => {
+//   const st=req.body;
+//   console.log(st)
+//   try {
+//       const student = new Student(st);
+//       const result = await student.save();
+//       let token;
+//       try {
+//           token = jwt.sign(
+//               {rollNo: st.rollNo,studentName :st.studentName ,email: st.email },
+//               process.env.SecretKey,
+//               { expiresIn: "1h" }
+//               );
+//           } catch (err) {
+//               const error = new Error("Error! Something went wrong.");
+//               next(error);
+//           }
+//           res
+//           .status(201)
+//           .json({
+//               success: true,
+//               data: {
+//                   //rollNo:st.rollNo,
+//                   token: token
+//               },
+//           });
+//       } catch(err) {
+//           console.log("errrrrrrrrrrrr",err)
+//       }
+//       });
 
+//______________________________________
+//Router for Adding Students in database
 router.post("/signup", async (req, res, next) => {
     const st=req.body;
     console.log(st)
@@ -47,11 +81,11 @@ router.post("/signup", async (req, res, next) => {
         const result = await student.save();
         let token;
         try {
-            token = jwt.sign(
-                {rollNo: st.rollNo,studentName :st.studentName ,email: st.email },
-                process.env.SecretKey,
-                { expiresIn: "1h" }
-                );
+          token = jwt.sign(
+                          {username:username },
+                          process.env.SecretKey,
+                          { expiresIn: "1h" }
+                          );
             } catch (err) {
                 const error = new Error("Error! Something went wrong.");
                 next(error);
@@ -69,7 +103,9 @@ router.post("/signup", async (req, res, next) => {
             console.log("errrrrrrrrrrrr",err)
         }
         });
-        //_______________________Instructor Router
+
+        //Instructor Router
+        
         router.post("/signupInstructor", async (req, res, next) => {
           const it=req.body;
           console.log(it)
@@ -100,17 +136,35 @@ router.post("/signup", async (req, res, next) => {
                   console.log("errrrrrrrrrrrr",err)
               }
               });
+              //Admin login code
 
 router.post('/AdminLogin',(req,res)=>{
-    const {email,password}=req.body;
-    if(email=="admin" && password=="admin"){
-        res.status(201).send({success:true})
+  console.log("hello")
+  const {username,password}=req.body;
+    if(username=="admin" && password=="admin"){
+      let token;
+      try{
+          token=jwt.sign(
+            {username:"admin"},
+            process.env.SecretKey,
+            {expiresIn:"1h"}
+          )
+          
+        }catch(err){
+          res.status(404).send("Something went wrong")
+        }
+        res.status(200).json({
+          username:username,
+          token
+        })
     }
     else{
         res.status(404).send("Wrong email or password")
     }
 })
 
+
+//Not using the code below
 router.get('/getStudents',authMiddleware,(req,res)=>{
     Student.find()
     .then(sArray=>{

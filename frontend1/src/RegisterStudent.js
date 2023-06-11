@@ -20,7 +20,6 @@ const StudentForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Process the form data here
     let st={
       rollNo,
       studentName,

@@ -12,11 +12,11 @@ const MONGODB_URL = process.env.URL;
 const port = process.env.port;
 
 const Admin=require("./Routes/Admin")
-app.use(Admin)
-
-
 
 app.use(express.json())
+// app.use("/admin",Admin)
+app.use(Admin)
+
 mongoose
     .connect(MONGODB_URL)
     .then(()=>{
@@ -26,9 +26,10 @@ mongoose
         console.log(err);
     })
 
+    
     app.get("/",(req,res)=>{
         res.send("Home Page")
-})
+    })
 
 app.listen(port)
 
