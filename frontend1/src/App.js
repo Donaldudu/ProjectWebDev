@@ -5,6 +5,7 @@ import ViewFeedbacks from "./ViewFeedbacks";
 import AddInstructor from "./RegisterInstructor";
 import CardsContainer from "./User"
 import CourseForm from "./AddCourse";
+import AdminAccountForm from "./Account";
 import { Routes , Route } from "react-router-dom";
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/AddInstructor" element = {<AddInstructor/>}/>
       <Route path = "/Course" element  = {<CourseForm/>}/>
       <Route path = "/User" element={<CardsContainer/>}/>
+      <Route path = "/Account" element = {<AdminAccountForm/>}/>
       
       {/* <Route path = "/ViewFeedbacks" element={<ViewFeedbacks/>}/> */}
       </Routes>
