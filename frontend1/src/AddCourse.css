@@ -24,13 +24,13 @@
   .course-form button {
     margin-top: 10px;
     padding: 8px 12px;
-    background-color: #4caf50;
+    background-color: blueviolet;
     color: white;
     border: none;
     cursor: pointer;
   }
   
   .course-form button:hover {
-    background-color: #45a049;
+    background-color: rgb(102, 32, 168);
   }
   
